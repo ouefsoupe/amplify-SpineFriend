@@ -8,7 +8,6 @@ const client = generateClient<Schema>();
 function App() {
   const { user, signOut } = useAuthenticator();
   const [todos, setTodos] = useState<Array<Schema["Todo"]["type"]>>([]);
-  // const { signOut } = useAuthenticator();
     
   function deleteTodo(id: string) {
     client.models.Todo.delete({ id })

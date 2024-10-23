@@ -1,19 +1,34 @@
 import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
 
 /*== STEP 1 ===============================================================
-The section below creates a Todo database table with a "content" field. Try
-adding a new "isDone" field as a boolean. The authorization rule below
+The section below creates a Todo database table with a "content" field. 
+Try adding a new "isDone" field as a boolean. The authorization rule below
 specifies that any user authenticated via an API key can "create", "read",
 "update", and "delete" any "Todo" records.
 =========================================================================*/
 const schema = a.schema({
+  // Todo table definition
   Todo: a
     .model({
       content: a.string(),
-    }).authorization(allow => [allow.owner()]),});
+      isDone: a.boolean(), // Adding an "isDone" field as a boolean
+    })
+    .authorization(allow => [allow.owner()]), // Authorization rule: owner-based access
 
+  // Info definition with id, userId, and info fields
+  Info: a
+    .model({
+      id: a.id(),           // Unique ID for each record
+      userId: a.string(),    // User ID (owner of the record)
+      info: a.string(),      // Some additional information
+    })
+    .authorization(allow => [allow.owner()]),
+});
+
+// Define the client schema type
 export type Schema = ClientSchema<typeof schema>;
 
+// Define the data configuration
 export const data = defineData({
   schema,
   authorizationModes: {
